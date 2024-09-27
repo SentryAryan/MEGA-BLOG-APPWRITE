@@ -5,7 +5,7 @@ import Logo from "./Logo";
 import { useDispatch } from "react-redux";
 import { login as appwriteLogin } from "../appwrite/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { login } from "../redux/slices/authSlice";
 import { getCurrentUser } from "../appwrite/auth";
 import * as yup from "yup";
@@ -19,7 +19,13 @@ function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors } } = useForm(
-        { resolver: yupResolver(schema) }
+        {
+            resolver: yupResolver(schema),
+            defaultValues: {
+                email: "",
+                password: "",
+            }
+        }
     );
     const [error, setError] = useState(null);
 
@@ -75,17 +81,21 @@ function Login() {
                             {...register("email")}
                             error={errors.email?.message}
                         />
-                        <p>{errors.email?.message}</p>
-                        
+                        <p className="text-red-600 font-bold">
+                            {errors.email?.message}
+                        </p>
+
                         <Input
-                            label="Password"
+                            label="Password: "
                             type="password"
-                            place
+                            placeholder="Enter your password"
                             {...register("password")}
                             error={errors.password?.message}
                         />
-                        <p>{errors.password?.message}</p>
-                        
+                        <p className="text-red-600 font-bold">
+                            {errors.password?.message}
+                        </p>
+
                         <Button
                             type="submit"
                             className="w-full"
