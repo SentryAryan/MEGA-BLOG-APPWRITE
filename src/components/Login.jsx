@@ -33,7 +33,7 @@ function Login() {
     const loginHandler = async (data) => {
         setError("");
         try {
-            const session = await appwriteLogin(data);
+            await appwriteLogin(data);
             const userData = await getCurrentUser();
             dispatch(login({ userData }));
             navigate("/");
@@ -101,7 +101,7 @@ function Login() {
                             type="submit"
                             className="w-full"
                         >
-                            Sign In
+                            Log In
                         </Button>
                     </div>
                 </form>
