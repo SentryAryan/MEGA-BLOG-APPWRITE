@@ -69,10 +69,29 @@ function Login() {
                 <form onSubmit={handleSubmit(loginHandler)}>
                     <div className="space-y-5">
                         <Input
-                            label="Email"
+                            label="Email: "
                             type="email"
-                            {...register("email", { required: true })}
+                            placeholder="Enter your email"
+                            {...register("email")}
+                            error={errors.email?.message}
                         />
+                        <p>{errors.email?.message}</p>
+                        
+                        <Input
+                            label="Password"
+                            type="password"
+                            place
+                            {...register("password")}
+                            error={errors.password?.message}
+                        />
+                        <p>{errors.password?.message}</p>
+                        
+                        <Button
+                            type="submit"
+                            className="w-full"
+                        >
+                            Sign In
+                        </Button>
                     </div>
                 </form>
             </div>
