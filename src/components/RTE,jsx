@@ -1,0 +1,40 @@
+import React from 'react'
+import { Editor } from '@tinymce/tinymce-react';
+import { Controller } from 'react-hook-form';
+
+const RTE = ({ name, control, label, defaultValue = '' }) => {
+
+    const plugins = [
+        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'emoticons', 'template', 'help'
+    ]
+    const toolbar = 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image'
+
+    return (
+        <div className='w-full'>
+            {label && <label className='inline-block mb-1 pl-1'>{label}</label>}
+            
+            <Controller
+                control={control}
+                name={name || 'content'}
+                render={({ field: { onChange } }) => (
+                    <Editor
+                        apiKey={import.meta.env.VITE_TINY_API_KEY}
+                        initialValue={defaultValue}
+                        onEditorChange={onChange}
+                        init={{
+                            height: 500,
+                            menubar: true,
+                            plugins: plugins,
+                            toolbar: toolbar,
+                            content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                        }}
+                    />
+                )}
+            />
+        </div>
+    )
+}
+
+export default RTE
