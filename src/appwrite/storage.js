@@ -25,13 +25,9 @@ async function deleteFile(fileId) {
     }
 }
 
-async function getFilePreview(fileId) {
-    try {
-        const filePreview = await storage.getFilePreview(config.appwriteBucketId, fileId);
-        return filePreview;
-    } catch (error) {
-        throw error;
-    }
+function getFilePreview(fileId) {
+    const filePreview = storage.getFilePreview(config.appwriteBucketId, fileId);
+    return filePreview;
 }
 
 export { uploadFile, deleteFile, getFilePreview };
