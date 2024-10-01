@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { createAccount, getCurrentUser } from "../appwrite/auth";
 import Button from "./Button";
 import Input from "./Input";
-import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { login } from "../redux/slices/authSlice";
 import Logo from "./Logo";
+import { useDispatch } from "react-redux";
+import { login as appwriteLogin } from "../appwrite/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { login } from "../redux/slices/authSlice";
+import { getCurrentUser } from "../appwrite/auth";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().required(),
-    name: yup.string().required(),
 });
 
-function SignUp() {
+function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors } } = useForm(
@@ -25,16 +25,15 @@ function SignUp() {
             defaultValues: {
                 email: "",
                 password: "",
-                name: "",
             }
         }
     );
     const [error, setError] = useState(null);
 
-    const signupHandler = async (data) => {
+    const loginHandler = async (data) => {
         setError("");
         try {
-            await createAccount(data);
+            await appwriteLogin(data);
             const userData = await getCurrentUser();
             dispatch(login({ userData }));
             navigate("/");
@@ -44,7 +43,7 @@ function SignUp() {
     };
 
     return (
-        <div className="flex items-center justify-center">
+        <div className='flex items-center justify-center w-full'>
             <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl 
             p-10 border border-black/10`}>
                 <div className="mb-2 flex justify-center">
@@ -54,17 +53,17 @@ function SignUp() {
                 </div>
 
                 <h2 className="text-center text-2xl font-bold leading-tight">
-                    Sign up to your account
+                    Sign in to your account
                 </h2>
 
-                <p>
-                    Already have an account?&nbsp;
+                <p className="mt-2 text-center text-base text-black/60">
+                    Don&apos;t have any account?&nbsp;
                     <Link
-                        to="/login"
+                        to="/signup"
                         className="font-medium text-primary transition-all 
                         duration-200 hover:underline"
                     >
-                        Sign In
+                        Sign Up
                     </Link>
                 </p>
 
@@ -74,20 +73,8 @@ function SignUp() {
                     </p>
                 )}
 
-                <form onSubmit={handleSubmit(signupHandler)}>
+                <form onSubmit={handleSubmit(loginHandler)}>
                     <div className="space-y-5">
-
-                        <Input
-                            label="Full Name: "
-                            type="text"
-                            placeholder="Enter your full name"
-                            {...register("name")}
-                            error={errors.name?.message}
-                        />
-                        <p className="text-red-600 font-bold">
-                            {errors.name?.message}
-                        </p>
-
                         <Input
                             label="Email: "
                             type="email"
@@ -114,7 +101,7 @@ function SignUp() {
                             type="submit"
                             className="w-full"
                         >
-                            Sign Up
+                            Log In
                         </Button>
                     </div>
                 </form>
@@ -123,4 +110,4 @@ function SignUp() {
     )
 }
 
-export default SignUp;
+export default LoginForm;

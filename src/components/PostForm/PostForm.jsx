@@ -24,7 +24,7 @@ const postFormSchema = yup.object().shape({
 })
 
 function PostForm({ post }) {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors }, getValues, watch, setValue, control } = useForm({
         resolver: yupResolver(postFormSchema),
         context: { isNewPost: !post },
         defaultValues: {
@@ -120,6 +120,19 @@ function PostForm({ post }) {
                 />
                 <p className="text-red-600 font-bold">
                     {errors.slug?.message}
+                </p>
+
+                <RTE
+                    label="Content:"
+                    name="content"
+                    placeholder="Enter content here"
+                    defaultValue={getValues("content")}
+                    className="mb-4"
+                    control={control}
+                    errors={errors}
+                />
+                <p className="text-red-600 font-bold">
+                    {errors.content?.message}
                 </p>
             </div>
 
