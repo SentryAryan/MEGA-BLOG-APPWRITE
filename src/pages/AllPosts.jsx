@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import Container from '../components/Container'
+import Container from '../components/Container/Container'
 import PostCard from '../components/PostCard'
 import { getAllPosts } from '../appwrite/database'
 function AllPosts() {
     const [posts, setPosts] = useState([])
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const posts = await getAllPosts([])
-                setPosts(posts.documents)
-            } catch (error) {
-                console.error("Error fetching posts:", error)
+    
+    const fetchPosts = async () => {
+        try {
+            const posts = await getAllPosts([])
+            if (posts) {
+                setPosts(posts?.documents)
             }
+        } catch (error) {
+            console.error("Error fetching posts:", error)
         }
+    }
+    
+    useEffect(() => {
         fetchPosts()
     }, [])
 
