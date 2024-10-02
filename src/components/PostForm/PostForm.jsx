@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Button from '../Button'
@@ -96,13 +96,25 @@ function PostForm({ post }) {
                     {errors.title?.message}
                 </p>
 
-                <Input
-                    label="Slug:"
-                    placeholder="Enter slug here"
-                    className="mb-4"
-                    onInput={(e) => setValue("slug", slugTransform(e.target.value), { shouldValidate: true })}
-                    {...register("slug", { required: 'Slug is required' })}
-                    errors={errors}
+                <Controller
+                    name="slug"
+                    control={control}
+                    rules={{ required: 'Slug is required' }}
+                    render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <Input
+                            label="Slug:"
+                            placeholder="Enter slug here"
+                            className="mb-4"
+                            value={value}
+                            onChange={(e) => {
+                                const transformedSlug = slugTransform(e.target.value);
+                                onChange(transformedSlug);
+                            }}
+                            onBlur={onBlur}
+                            ref={ref}
+                            errors={errors}
+                        />
+                    )}
                 />
                 <p className="text-red-600 font-bold">
                     {errors.slug?.message}

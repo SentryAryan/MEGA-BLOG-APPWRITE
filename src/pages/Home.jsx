@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Container from '../components/Container/Container'
 import PostCard from '../components/PostCard'
 import { getAllPosts } from '../appwrite/database'
+import { useSelector } from 'react-redux'
 
 function Home() {
     const [posts, setPosts] = useState([]);
-
+    const status = useSelector((state) => state.auth.status);
     const fetchPosts = async () => {
         try {
             const posts = await getAllPosts([]);
@@ -21,14 +22,14 @@ function Home() {
         fetchPosts();
     }, []);
 
-    if (posts.length === 0) {
+    if (posts.length === 0 || !status) {
         return (
             <div className="w-full py-8 mt-4 text-center">
                 <Container>
                     <div className="flex flex-wrap">
                         <div className="p-2 w-full">
                             <h1 className="text-2xl font-bold hover:text-gray-500">
-                                Login to see posts
+                                {status ? "No posts found" : "Login to see posts"}
                             </h1>
                         </div>
                     </div>
