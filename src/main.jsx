@@ -18,17 +18,17 @@ const router = createBrowserRouter([
     path: '/',
     element: <App />,
     children: [
-      { 
-        path: "/", 
-        element: <Home /> 
+      {
+        path: "/",
+        element: <Home />
       },
       {
         path: "/login",
-        element: <AuthLayout><Login /></AuthLayout>
+        element: <Login />
       },
       {
         path: "/signup",
-        element: <AuthLayout><Signup /></AuthLayout>
+        element: <Signup />
       },
       {
         path: "/add-post",
@@ -51,9 +51,7 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>,
 )

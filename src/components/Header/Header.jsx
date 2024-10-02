@@ -7,8 +7,6 @@ import Logo from '../Logo'
 import { useNavigate } from 'react-router-dom'
 function Header() {
 
-  console.log("Header.jsx");
-
   const navigate = useNavigate();
   const authStatus = useSelector((state) => state.auth.status);
   const navItems = [

@@ -4,7 +4,7 @@ import { logout } from '../../redux/slices/authSlice'
 import { logout as appwriteLogout } from '../../appwrite/auth';
 
 function LogoutBtn() {
-    console.log("LogoutBtn.jsx");
+
     const dispatch = useDispatch();
     const logoutHandler = async () => {
         try {

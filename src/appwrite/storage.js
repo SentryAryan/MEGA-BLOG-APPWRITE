@@ -1,4 +1,4 @@
-import { client, storage, ID } from "./conf";
+import { Client, Storage, ID } from "appwrite"  ;
 import config from "../config/config";
 
 const client = new Client()

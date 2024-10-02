@@ -8,10 +8,9 @@ import { useSelector } from 'react-redux'
 import Loader from './components/Loader'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
+import { Outlet } from 'react-router-dom';
 
 function App() {
-
-  console.log("App.jsx");
 
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.loading);
@@ -40,7 +39,7 @@ function App() {
           <div className='w-full block'>
             <Header />
             <main>
-              Todo:{/* <Outlet /> */}
+              <Outlet />
             </main>
             <Footer />
           </div>

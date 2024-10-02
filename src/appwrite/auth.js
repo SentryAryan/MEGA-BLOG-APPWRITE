@@ -28,7 +28,7 @@ async function createAccount({email, password, name}) {
 
 async function login({email, password}) {
     try {
-        const session = await account.createEmailSession(email, password);
+        const session = await account.createEmailPasswordSession(email, password);
         return session;
     } catch (error) {
         throw error;

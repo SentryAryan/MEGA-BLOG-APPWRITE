@@ -2,31 +2,18 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import Button from '../Button'
 import Input from '../Input'
 import Select from '../Select'
 import RTE from '../RTE'
 import { createPost, updatePost } from '../../appwrite/database'
 import { uploadFile, deleteFile, getFilePreview } from '../../appwrite/storage'
-
-const postFormSchema = yup.object().shape({
-    title: yup.string().required('Title is required'),
-    slug: yup.string().required('Slug is required'),
-    content: yup.string().required('Content is required'),
-    status: yup.string(),
-    image: yup.mixed().when('$isNewPost', {
-        is: true,
-        then: yup.mixed().required('Image is required for new posts'),
-        otherwise: yup.mixed()
-    }),
-})
+import { useCallback, useEffect } from 'react'
 
 function PostForm({ post }) {
+
+    console.log("PostForm.jsx")
     const { register, handleSubmit, formState: { errors }, getValues, watch, setValue, control } = useForm({
-        resolver: yupResolver(postFormSchema),
-        context: { isNewPost: !post },
         defaultValues: {
             title: post?.title || '',
             slug: post?.slug || '',
@@ -52,7 +39,7 @@ function PostForm({ post }) {
                     featuredImage = file.$id;
                 }
 
-                dbPost = await updatePost(post.slug, {
+                dbPost = await updatePost(post.$id, {
                     ...data,
                     featuredImage,
                 });
@@ -89,8 +76,6 @@ function PostForm({ post }) {
         const subscription = watch((value, { name }) => {
             if (name === "title") {
                 setValue("slug", slugTransform(value.title), { shouldValidate: true });
-            } else if (name === "slug") {
-                setValue("slug", slugTransform(value.slug), { shouldValidate: true });
             }
         });
 
@@ -104,7 +89,7 @@ function PostForm({ post }) {
                     label="Title:"
                     placeholder="Enter title here"
                     className="mb-4"
-                    {...register("title")}
+                    {...register("title", { required: 'Title is required' })}
                     errors={errors}
                 />
                 <p className="text-red-600 font-bold">
@@ -115,7 +100,8 @@ function PostForm({ post }) {
                     label="Slug:"
                     placeholder="Enter slug here"
                     className="mb-4"
-                    {...register("slug")}
+                    onInput={(e) => setValue("slug", slugTransform(e.target.value), { shouldValidate: true })}
+                    {...register("slug", { required: 'Slug is required' })}
                     errors={errors}
                 />
                 <p className="text-red-600 font-bold">
@@ -129,6 +115,7 @@ function PostForm({ post }) {
                     defaultValue={getValues("content")}
                     className="mb-4"
                     control={control}
+                    rules={{ required: 'Content is required' }}
                     errors={errors}
                 />
                 <p className="text-red-600 font-bold">
@@ -142,7 +129,7 @@ function PostForm({ post }) {
                     type="file"
                     accept="image/*"
                     className="mb-4"
-                    {...register("image")}
+                    {...register("image", { required: 'Image is required' })}
                     errors={errors}
                 />
                 <p className="text-red-600 font-bold">

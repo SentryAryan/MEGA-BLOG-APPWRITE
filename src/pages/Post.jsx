@@ -4,6 +4,8 @@ import { deletePost, getPost } from '../appwrite/database'
 import { deleteFile, getFilePreview } from '../appwrite/storage'
 import { useSelector } from 'react-redux'
 import parse from 'html-react-parser'
+import Container from '../components/Container/Container'
+import Button from '../components/Button'
 
 function Post() {
     const { slug } = useParams();
@@ -50,7 +52,7 @@ function Post() {
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
-                        src={getFilePreview(post.featuredImage).url}
+                        src={getFilePreview(post.featuredImage)}
                         alt={post.title}
                         className='rounded-xl'
                     />

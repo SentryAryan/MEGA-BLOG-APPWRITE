@@ -5,30 +5,19 @@ import Button from "./Button";
 import Input from "./Input";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { login } from "../redux/slices/authSlice";
 import Logo from "./Logo";
-
-const schema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-    name: yup.string().required(),
-});
 
 function SignUpForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { register, handleSubmit, formState: { errors } } = useForm(
-        {
-            resolver: yupResolver(schema),
-            defaultValues: {
-                email: "",
-                password: "",
-                name: "",
-            }
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            email: "",
+            password: "",
+            name: "",
         }
-    );
+    });
     const [error, setError] = useState(null);
 
     const signupHandler = async (data) => {
@@ -81,8 +70,7 @@ function SignUpForm() {
                             label="Full Name: "
                             type="text"
                             placeholder="Enter your full name"
-                            {...register("name")}
-                            error={errors.name?.message}
+                            {...register("name", { required: "Full name is required" })}
                         />
                         <p className="text-red-600 font-bold">
                             {errors.name?.message}
@@ -92,8 +80,13 @@ function SignUpForm() {
                             label="Email: "
                             type="email"
                             placeholder="Enter your email"
-                            {...register("email")}
-                            error={errors.email?.message}
+                            {...register("email", { 
+                                required: "Email is required",
+                                pattern: {
+                                    value: /\S+@\S+\.\S+/,
+                                    message: "Invalid email address"
+                                }
+                            })}
                         />
                         <p className="text-red-600 font-bold">
                             {errors.email?.message}
@@ -103,8 +96,13 @@ function SignUpForm() {
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
-                            {...register("password")}
-                            error={errors.password?.message}
+                            {...register("password", { 
+                                required: "Password is required",
+                                minLength: {
+                                    value: 6,
+                                    message: "Password must be at least 6 characters long"
+                                }
+                            })}
                         />
                         <p className="text-red-600 font-bold">
                             {errors.password?.message}

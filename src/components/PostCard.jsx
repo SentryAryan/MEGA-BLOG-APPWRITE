@@ -2,7 +2,8 @@ import React, { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { getFilePreview } from "../appwrite/storage";
 
-function PostCard({ $id, title, featuredImage }) {
+function PostCard({ post }) {
+  const { $id, title, featuredImage } = post;
   const [filePreviewUrl, setFilePreviewUrl] = useState(null);
 
   useEffect(() => {
@@ -22,3 +23,5 @@ function PostCard({ $id, title, featuredImage }) {
     </Link>
   )
 }
+
+export default PostCard;

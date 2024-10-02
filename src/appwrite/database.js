@@ -1,4 +1,4 @@
-import { client, Databases, Query } from "appwrite";
+import { Client, Databases, Query } from "appwrite";
 import config from "../config/config";
 
 const client = new Client()
@@ -15,7 +15,6 @@ async function createPost({ title, slug, content, featuredImage, status, userId 
             slug,
             {
                 title,
-                slug,
                 content,
                 featuredImage,
                 status,

@@ -8,26 +8,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { login } from "../redux/slices/authSlice";
 import { getCurrentUser } from "../appwrite/auth";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-const schema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-});
 
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { register, handleSubmit, formState: { errors } } = useForm(
-        {
-            resolver: yupResolver(schema),
-            defaultValues: {
-                email: "",
-                password: "",
-            }
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            email: "",
+            password: "",
         }
-    );
+    });
     const [error, setError] = useState(null);
 
     const loginHandler = async (data) => {
@@ -79,8 +69,13 @@ function LoginForm() {
                             label="Email: "
                             type="email"
                             placeholder="Enter your email"
-                            {...register("email")}
-                            error={errors.email?.message}
+                            {...register("email", { 
+                                required: 'Email is required', 
+                                pattern: {
+                                    value: /\S+@\S+\.\S+/,
+                                    message: "Invalid email address"
+                                }
+                            })}
                         />
                         <p className="text-red-600 font-bold">
                             {errors.email?.message}
@@ -90,8 +85,7 @@ function LoginForm() {
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
-                            {...register("password")}
-                            error={errors.password?.message}
+                            {...register("password", { required: 'Password is required' })}
                         />
                         <p className="text-red-600 font-bold">
                             {errors.password?.message}

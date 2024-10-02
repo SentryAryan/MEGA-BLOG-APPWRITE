@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from '../components/Container/Container'
 import PostCard from '../components/PostCard'
 import { getAllPosts } from '../appwrite/database'
